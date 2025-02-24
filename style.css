@@ -1,0 +1,79 @@
+html {
+    height: 100vh;
+}
+
+body {
+    background-color: #AAAAAA;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    border: 1px dotted gray;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    gap: 0px;
+    height: 70vh;
+    width: 70vw;
+}
+
+.cell.rock {
+    background-image: url(assets/rock.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.cell.treasure {
+    background-image: url(assets/treasure.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.cell.player {
+    background-image: url(assets/player.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.cell.blue-dragon {
+    background-image: url(assets/blue-dragoon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 46px;
+}
+
+.btn-replay {
+    margin-top: 20px;
+    padding: 40px 80px;
+    background-color: green;
+    color: #f9fcf9;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 5px 5px 5px #3f3333;
+    font-size: 28px;
+}
+
+.btn-replay:hover {
+    background-color: rgba(255, 255, 0, 0.501);
+}
