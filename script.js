@@ -51,7 +51,7 @@
                 count++;
             }
         }
-        console.log(existingIndex)
+        
         // Fin boucle treasure
         // Faire fonctionner le déplacement du joueur avec les touches directionnelles.
         let player = document.querySelector('.player');
