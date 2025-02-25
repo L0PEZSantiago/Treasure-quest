@@ -6,22 +6,48 @@ body {
     background-color: #AAAAAA;
     display: flex;
     justify-content: center;
-    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    height: 90vh;
+    box-sizing: border-box;
+}
+
+audio {
+    position: absolute;
+    bottom: 0.3rem;
+}
+
+.lifes {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.2rem;
+    height: fit-content;
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+}
+
+.lifes i {
+    color: rgba(255, 0, 0, 0.795);
+    font-size: 42px;
+}
+
+.lifes i.lost {
+    color: rgba(255, 0, 0, 0.185);
 }
 
 .cell {
     width: 40px;
     height: 40px;
-    border: 1px dotted gray;
+    border: 1px solid grey;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
-    gap: 0px;
-    height: 70vh;
-    width: 70vw;
+    width: 800px;
+    height: 800px;
 }
 
 .cell.rock {
@@ -76,4 +102,74 @@ body {
 
 .btn-replay:hover {
     background-color: rgba(255, 255, 0, 0.501);
+}
+
+.gamepad {
+    display: none;
+    position: absolute;
+}
+
+
+
+@media screen and (max-width: 767px) {
+    body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .grid {
+        height: 75%;
+        width: 80%;
+    }
+
+    .cell {
+        width: 25px;
+        height: 25px;
+    }
+
+    .success {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        font-size: 20px;
+    }
+
+    .btn-replay {
+        padding: 20px 40px;
+        font-size: 16px;
+    }
+
+    .lifes {
+        top: 90%;
+    }
+
+    .lifes i {
+        font-size: 40px;
+    }
+
+    audio {
+        display: none;
+    }
+
+    .gamepad {
+        display: flex;
+        gap: 15px;
+        margin-top: 6rem;
+        position: initial;
+    }
+    
+    .gamepad button {
+        padding: 10px 20px;
+        background-color: gray;
+        color: #f9fcf9;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        box-shadow: 5px 5px 5px orangered;
+        font-size: 28px;
+    }
+
 }
