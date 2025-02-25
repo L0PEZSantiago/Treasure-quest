@@ -1,6 +1,12 @@
-html {
-    height: 100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+/* html {
+    height: 100vh;
+} */
 
 body {
     background-color: #AAAAAA;
@@ -8,8 +14,6 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 90vh;
-    box-sizing: border-box;
 }
 
 audio {
@@ -19,10 +23,11 @@ audio {
 
 .lifes {
     position: absolute;
-    top: 1.5rem;
-    right: 1.2rem;
+    top: .2rem;
+    right: .2rem;
     height: fit-content;
     display: flex;
+    flex-direction: column;
     gap: 10px;
     margin: 10px;
 }
@@ -36,18 +41,22 @@ audio {
     color: rgba(255, 0, 0, 0.185);
 }
 
-.cell {
-    width: 40px;
-    height: 40px;
-    border: 1px solid grey;
-}
+
 
 .grid {
+    width: 90vw;
+    height: 90vh;
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
-    width: 800px;
-    height: 800px;
+    margin-top: 1rem;
+}
+.cell {
+    width: calc(90vw/20);
+    height: calc(90vh/20);
+    border: 1px solid grey;
+    grid-column: 1 span;
+    grid-row: 1 span;
 }
 
 .cell.rock {
@@ -74,6 +83,12 @@ audio {
     background-repeat: no-repeat;
 }
 
+.cell.orange-dragoon {
+    background-image: url(assets/orange-dragoon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .success {
     color: green;
     font-weight: bold;
@@ -85,7 +100,7 @@ audio {
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
-    font-size: 46px;
+    font-size: 36px;
 }
 
 .btn-replay {
@@ -112,20 +127,15 @@ audio {
 
 
 @media screen and (max-width: 767px) {
-    body {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-    }
+   
     .grid {
-        height: 75%;
-        width: 80%;
+        height: 40vh;
+        width: 100vw;
     }
 
     .cell {
-        width: 25px;
-        height: 25px;
+        width: calc(100vw/20);
+        height: calc(40vh/20);
     }
 
     .success {
@@ -143,7 +153,8 @@ audio {
     }
 
     .lifes {
-        top: 90%;
+        position: relative;
+        flex-direction: row;
     }
 
     .lifes i {
@@ -172,9 +183,12 @@ audio {
         font-size: 20px;
     }
 
-    .gamepad button:first-child {
-        background-image: url(assets/arrow-up.png);
-        background-size: contain;
-        background-repeat: no-repeat;
+    .btnUp {
+        position: absolute;
+        transform: translate(4.2rem, -4rem);
+    }
+    .btnDown {
+        position: absolute;
+        transform: translate(3rem, 4rem);
     }
 }
