@@ -20,11 +20,24 @@ document.addEventListener('DOMContentLoaded', (e) => {
     let btnRight = document.querySelector('.btnRight');
     let grid = document.querySelector('.grid');
 
-
+    let dragons = [];
     let existingIndex = [];
     let life = 3;
     let countTreasure = 0;
     let heartArray = Array.from(document.querySelectorAll('i'));
+
+
+    // Je fais ma classe dragon, quand je crée un dragon, il est push dans le tableau dragons ci-dessus
+    class Dragon {
+    constructor(index, type, className) {
+        this.index = index;
+        this.type = type;
+        this.className = className;
+        
+        dragons.push(this);
+    }
+    };
+
 
     // Générer une grille de 20x20
     for (let i = 0; i < 400; i++) {
@@ -53,28 +66,46 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     // Ajouter le dragon
     // Le dragon ne doit pas se trouver sur le trésor
-    
+
     let blueDragonIndex = randomIndex();
     while (blueDragonIndex == treasureIndex) {
         blueDragonIndex = randomIndex();
     }
-    cellArray[blueDragonIndex].classList.add('blue-dragon');
+    cellArray[blueDragonIndex].classList.add('blue-dragoon');
     existingIndex.push(blueDragonIndex);
 
-    function createDragon(classeName) {
-        dragonIndex = randomIndex();
-        while (dragonIndex == treasureIndex) {
+
+// Ma fonction qui me permet de créer plusieurs dragons, je leur donne un index random au départ
+function createDragon (index, type, className) {
+    return new Dragon(index, type, className);
+}
+
+// Ma fonction qui me permet de donner un index non existant au dragon, et on l'insère dans le tableau cellArray, il prendra la place de son indice-même
+// Et biensur, lorsqu'il sera inséré, il sera push dans le tableau existingIndex
+function insertDragon(dragonIndex, className) {
+        while (dragonIndex == treasureIndex || dragonIndex == playerIndex) {
             dragonIndex = randomIndex();
         }
-        cellArray[dragonIndex].classList.add(classeName);
+        console.log(dragonIndex)
+        cellArray[dragonIndex].classList.add(className);
         existingIndex.push(dragonIndex);
-        return dragonIndex;
+        return dragonIndex; // Je retourne l'index du dragon au cas où je voudrais le manipuler
     }
 
-    let orangeDragonIndex = createDragon('orange-dragoon');
+
+createDragon(randomIndex(), 'Dragon', 'blue-dragoon');
+createDragon(randomIndex(), 'Dragon', 'purple-dragoon');
+createDragon(randomIndex(), 'Dragon', 'green-dragoon');
+createDragon(randomIndex(), 'Dragon', 'orange-dragoon');
+createDragon(randomIndex(), 'Dragon', 'yellow-dragoon');
+createDragon(randomIndex(), 'Boss', 'red-dragoon');
+
+
+    
+
 
     // Création d'une boucle pour ajouter des rochers aléatoirement
-    let count = 0;
+    let count = 0; 
     while (count != 50) {
         let rockIndex = randomIndex();
 
@@ -138,8 +169,8 @@ document.addEventListener('DOMContentLoaded', (e) => {
     
     // Changer l'index du dragon
     function changeblueDragonIndex() {
-        cellArray[blueDragonIndex].classList.remove('blue-dragon');
-        cellArray[newblueDragonIndex].classList.add('blue-dragon');
+        cellArray[blueDragonIndex].classList.remove('blue-dragoon');
+        cellArray[newblueDragonIndex].classList.add('blue-dragoon');
         blueDragonIndex = newblueDragonIndex;
         return blueDragonIndex;
     }
@@ -150,6 +181,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
         playerIndex = newPlayerIndex;
         return newPlayerIndex;
         }
+    
 
     function lostLife() {
             heartArray[life - 1].classList.add('lost');
@@ -250,7 +282,12 @@ document.addEventListener('DOMContentLoaded', (e) => {
         // Gagner si le joueur  trouve les 3 trésors
         if (playerIndex == treasureIndex) {
             // success();
-            refreshTreasure();  
+            refreshTreasure();
+            // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
+            let dragon = dragons[Math.floor(Math.random() * dragons.length)]
+            console.log(dragon);
+            insertDragon(dragon.index, dragon.className);
+            // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
         }
     }); // Fin de la gestion des touches
 

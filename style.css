@@ -61,6 +61,7 @@ audio {
     align-items: center;
     justify-content: center;
 }
+
 .treasures img {
    width: 44px;
    height: 42px;
@@ -103,13 +104,30 @@ audio {
     background-image: url(assets/player.png);
 }
 
-.cell.blue-dragon {
+.cell.blue-dragoon {
     background-image: url(assets/blue-dragoon.png);
 }
 
 .cell.orange-dragoon {
     background-image: url(assets/orange-dragoon.png);
 }
+
+.cell.purple-dragoon {
+    background-image: url(assets/purple-dragoon.png);
+}
+
+.cell.green-dragoon {
+    background-image: url(assets/green-dragoon.png);
+}
+
+.cell.yellow-dragoon {
+    background-image: url(assets/yellow-dragoon.png);
+}
+
+.cell.red-dragoon {
+    background-image: url(assets/red-dragoon.png);
+}
+
 
 .success {
     color: green;
@@ -212,7 +230,7 @@ audio {
     }
     
     .gamepad button {
-        padding: 10px 20px;
+        padding: 15px 25px;
         background-color: gray;
         color: #f9fcf9;
         border: none;
