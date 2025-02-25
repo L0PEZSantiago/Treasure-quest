@@ -2,6 +2,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /* html {
@@ -35,13 +38,40 @@ audio {
 .lifes i {
     color: rgba(255, 0, 0, 0.795);
     font-size: 42px;
+    transition: all 0.7s ease-in-out;
+}
+
+.lifes i:first-child.last {
+    animation: scaleInOut 2s ease-in-out infinite;
 }
 
 .lifes i.lost {
     color: rgba(255, 0, 0, 0.185);
+    animation: scaleInOut 2s ease-in-out;
 }
 
+.treasures {
+    position: absolute;
+    bottom: calc(70vh - 42px);
+    right: .2rem;
+    margin: 10px;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.treasures img {
+   width: 44px;
+   height: 42px;
+   opacity: 0.3;
+   transition: all 0.5s ease-in-out;
+}
 
+.treasures img.finded {
+    opacity: 1;
+    animation: scaleInOut 2s ease-in-out;
+}
 
 .grid {
     width: 90vw;
@@ -61,32 +91,24 @@ audio {
 
 .cell.rock {
     background-image: url(assets/rock.png);
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .cell.treasure {
     background-image: url(assets/treasure.png);
-    background-size: contain;
-    background-repeat: no-repeat;
+    animation: scaleInOut 2s ease-in-out infinite;
+    border: none;
 }
 
 .cell.player {
     background-image: url(assets/player.png);
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .cell.blue-dragon {
     background-image: url(assets/blue-dragoon.png);
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .cell.orange-dragoon {
     background-image: url(assets/orange-dragoon.png);
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .success {
@@ -124,6 +146,18 @@ audio {
     position: absolute;
 }
 
+@keyframes scaleInOut {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 
 @media screen and (max-width: 767px) {
@@ -154,6 +188,11 @@ audio {
 
     .lifes {
         position: relative;
+        flex-direction: row;
+    }
+
+    .treasures {
+        position: inherit;
         flex-direction: row;
     }
 

@@ -1,16 +1,17 @@
 document.addEventListener('DOMContentLoaded', (e) => {
-
     // Ci-dessous le script JS pour gérer la génération de la grille et le placement du coffre, des rochers et du trésor.
-    // async function playMusic() {
+    async function playMusic() {
     let myAudio = document.querySelector('audio');
     myAudio.src = '(Music) Shinobi - BGM 2 (Arcade).mp3';
     myAudio.volume = 0.2;
-    myAudio.play();
+    await myAudio.play();
     myAudio.loop = true;
     myAudio.autoplay = true;
     myAudio.controls = true;
     myAudio.preload = 'auto';
+};
 
+    playMusic();
 
 
     let btnUp = document.querySelector('.btnUp');
@@ -34,7 +35,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     // Créer un tableau contenant toutes les cellules
     const cellArray = Array.from(document.querySelectorAll('.cell'));
+    const treasuresImgArray = Array.from(document.querySelectorAll('.treasures img'));
 
+   
     // Ajouter le player
     playerIndex = cellArray[0];
     playerIndex.classList.add('player');
@@ -69,7 +72,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }
 
     let orangeDragonIndex = createDragon('orange-dragoon');
-    console.log(orangeDragonIndex);
 
     // Création d'une boucle pour ajouter des rochers aléatoirement
     let count = 0;
@@ -122,6 +124,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
         // Déplacement horizontal
         moves.push(blueDragonIndex + (calcColDiff() > 0 ? 1 : -1));
     }
+    if (moves.length ===0) {
+        return blueDragonIndex;
+    }
     // Choisir aléatoirement une option parmi celles disponibles
     let newblueDragonIndex = moves[Math.floor(Math.random() * moves.length)];
 
@@ -129,22 +134,28 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }
 
     // Changer l'index du joueur
-    function changePlayerIndex() {
-        cellArray[playerIndex].classList.remove('player');
-        playerIndex = newPlayerIndex;
-        cellArray[playerIndex].classList.add('player');
-    }
+    
+    
     // Changer l'index du dragon
     function changeblueDragonIndex() {
         cellArray[blueDragonIndex].classList.remove('blue-dragon');
         cellArray[newblueDragonIndex].classList.add('blue-dragon');
         blueDragonIndex = newblueDragonIndex;
+        return blueDragonIndex;
     }
+
+    function changePlayerIndex() {
+        cellArray[playerIndex].classList.remove('player');
+        cellArray[newPlayerIndex].classList.add('player');
+        playerIndex = newPlayerIndex;
+        return newPlayerIndex;
+        }
 
     function lostLife() {
             heartArray[life - 1].classList.add('lost');
             life--;
             newblueDragonIndex = randomIndex();
+            life == 1 ? heartArray[0].classList.add('last') : false;
             changeblueDragonIndex();
         }
 
@@ -166,7 +177,8 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }
 
     function refreshTreasure() {
-              countTreasure++;
+            countTreasure++;
+            treasuresImgArray[countTreasure - 1].classList.add('finded');
             countTreasure == 3 ? success() : false;
             cellArray[treasureIndex].classList.remove('treasure');
             treasureIndex = randomIndex();
@@ -209,10 +221,16 @@ document.addEventListener('DOMContentLoaded', (e) => {
         if (cellArray[newPlayerIndex].classList.contains('rock')) {
             return;
         }
+
+        // A voir pour changer de place la fonction... Répétition en haut sinon bug sur version mobile
+        function changePlayerIndex() {
+            cellArray[playerIndex].classList.remove('player');
+            cellArray[newPlayerIndex].classList.add('player');
+            playerIndex = newPlayerIndex;
+            return newPlayerIndex;
+            }
         
-        cellArray[playerIndex].classList.remove('player');
-        cellArray[newPlayerIndex].classList.add('player');
-        playerIndex = newPlayerIndex;
+        playerIndex = changePlayerIndex();
 
         // Index du joueur divisé par 20, ou modulo 20 on arrondit le résultat si division, et cela donne la ligne et la colonne du joueur 
         newblueDragonIndex = dragonMoves();
@@ -226,7 +244,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
             lostLife();
         } else if (life == 0) {
             gameOver();  
-        }
+        } 
 
         
         // Gagner si le joueur  trouve les 3 trésors
@@ -265,25 +283,26 @@ document.addEventListener('DOMContentLoaded', (e) => {
         if (cellArray[newPlayerIndex].classList.contains('rock')) {
             return;
         }
-        cellArray[playerIndex].classList.remove('player');
-        cellArray[newPlayerIndex].classList.add('player');
-        playerIndex = newPlayerIndex;
+        
+        playerIndex = changePlayerIndex();
 
         newblueDragonIndex = dragonMoves();
         changeblueDragonIndex();
 
         if (newPlayerIndex == blueDragonIndex) {
             lostLife();
+      
         } else if (life == 0) {
             gameOver();  
-        }
+        } 
+
+        
 
         if (playerIndex == treasureIndex) {
             // success();
             refreshTreasure();  
         }
     });
-
 });
 
 
