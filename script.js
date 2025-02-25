@@ -337,7 +337,10 @@ createDragon(randomIndex(), 'Boss', 'red-dragoon');
 
         if (playerIndex == treasureIndex) {
             // success();
-            refreshTreasure();  
+            refreshTreasure();
+            let dragon = dragons[Math.floor(Math.random() * dragons.length)]
+            console.log(dragon);
+            insertDragon(dragon.index, dragon.className);  
         }
     });
 });
