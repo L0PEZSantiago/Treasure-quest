@@ -169,7 +169,12 @@ audio {
         cursor: pointer;
         border-radius: 12px;
         box-shadow: 5px 5px 5px orangered;
-        font-size: 28px;
+        font-size: 20px;
     }
 
+    .gamepad button:first-child {
+        background-image: url(assets/arrow-up.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
 }
