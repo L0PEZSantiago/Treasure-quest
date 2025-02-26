@@ -2,7 +2,7 @@
 // Ci-dessous le script JS pour gérer la génération de la grille et le placement du coffre, des rochers et du trésor.
 async function playMusic() {
     let myAudio = document.querySelector('audio');
-    myAudio.src = '(Music) Shinobi - BGM 2 (Arcade).mp3';
+    myAudio.src = 'Zelda Main Theme Song.mp3';
     myAudio.volume = 0.2;
     await myAudio.play();
     myAudio.loop = true;
@@ -13,6 +13,17 @@ async function playMusic() {
 
 playMusic();
 
+function treasureFounded() {
+    const chestSound = new Audio('arcade-ui-30-229499.mp3'); // Assurez-vous que le chemin est correct
+    chestSound.volume = 1; // Ajustez le volume selon vos besoins
+    chestSound.play();
+}
+
+function movementsSound() {
+    const moveSound = new Audio('movement-101711.mp3');
+    moveSound.volume = 1;
+    moveSound.play();
+}
 
 let btnUp = document.querySelector('.btnUp');
 let btnDown = document.querySelector('.btnDown');
@@ -25,6 +36,14 @@ let existingIndex = [];
 let life = 3;
 let countTreasure = 0;
 let heartArray = Array.from(document.querySelectorAll('i'));
+let totalForWin = 5;
+
+treasuresDiv = document.querySelector('.treasures');
+
+for (let i = 0; i < totalForWin; i++) {
+    treasuresDiv.innerHTML += `<img src="assets/treasure.png" alt="treasure">
+`;
+}
 
 
 // Je fais ma classe dragon, quand je crée un dragon, il est push dans le tableau dragons ci-dessus
@@ -60,8 +79,16 @@ existingIndex.push(0);
 // Ajouter le trésor aléatoirement
 
 let treasureIndex = randomIndex();
-cellArray[treasureIndex].classList.add('treasure');
-existingIndex.push(treasureIndex);
+
+while (treasureIndex == 0) {
+    treasureIndex = randomIndex();
+}
+
+if (treasureIndex != 0) {
+    cellArray[treasureIndex].classList.add('treasure');
+    existingIndex.push(treasureIndex);
+}
+
 
 
 // Ma fonction qui me permet de créer plusieurs dragons, je leur donne un index random au départ
@@ -95,18 +122,24 @@ insertDragon(dragon.index, dragon.className);
 
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
-let count = 0;
-while (count != 50) {
-    let rockIndex = randomIndex();
-
-    if (!existingIndex.includes(rockIndex) && rockIndex != 0) {
-        cellArray[rockIndex].classList.add('rock');
-        existingIndex.push(rockIndex);
+function createEnvironment(nbrOfElements , className) {
+    let count = 0;
+    while (count != nbrOfElements) {
+        let index = randomIndex();
+        while (existingIndex.includes(index) || index == playerIndex+1 || index == playerIndex+20) {
+            index = randomIndex();
+        }
+        console.log(`Ajout de ${className} à l'indice ${index}`);
+        cellArray[index].classList.add(className);
+        existingIndex.push(index);
         count++;
     }
 }
+createEnvironment(50, 'rock');
+createEnvironment(60 , 'grass');
 
-// Fin boucle treasure
+
+
 // Faire fonctionner le déplacement du joueur avec les touches directionnelles.
 let player = document.querySelector('.player');
 playerIndex = cellArray.indexOf(player);
@@ -201,7 +234,7 @@ function success() {
 function refreshTreasure() {
     countTreasure++;
     treasuresImgArray[countTreasure - 1].classList.add('finded');
-    countTreasure == 5 ? success() : false;
+    countTreasure == totalForWin ? success() : false;
     cellArray[treasureIndex].classList.remove('treasure');
     treasureIndex = randomIndex();
 
@@ -239,6 +272,8 @@ document.addEventListener('keydown', (event) => {
             return;
     }
 
+    movementsSound();
+
     if (cellArray[newPlayerIndex].classList.contains('rock')) {
         return;
     }
@@ -275,7 +310,8 @@ document.addEventListener('keydown', (event) => {
 
     // Gagner si le joueur  trouve les 3 trésors
     if (playerIndex == treasureIndex) {
-        // success();
+
+        treasureFounded();
         refreshTreasure();
         // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
         // let dragon = dragons[Math.floor(Math.random() * dragons.length)]
@@ -317,6 +353,8 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
             return;
 
     }
+
+    movementsSound();
     if (cellArray[newPlayerIndex].classList.contains('rock')) {
         return;
     }
@@ -342,6 +380,7 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
 
     if (playerIndex == treasureIndex) {
         // success();
+        treasureFounded();
         refreshTreasure();
         // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
         // let dragon = dragons[Math.floor(Math.random() * dragons.length)]
@@ -351,7 +390,7 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         dragon.isActive = true;
         insertDragon(dragon.index, dragon.className);
         console.log(treasureIndex, dragon.index);
-        // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
+        // insertDragon(Math.random.dragons.index, Math.random.dragons.className);
     }
 });
 // });

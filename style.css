@@ -52,7 +52,7 @@ audio {
 
 .treasures {
     position: absolute;
-    bottom: calc(55vh - 42px);
+    bottom: calc(30vh - 42px);
     right: .2rem;
     margin: 10px;
     gap: 5px;
@@ -92,6 +92,25 @@ audio {
 
 .cell.rock {
     background-image: url(assets/rock.png);
+}
+
+.cell.tree {
+    background-image: url(assets/arbre.png);
+}
+
+.cell.grass.player {
+    background-size: contain;
+    opacity: 0.6;
+    background-color: rgb(159, 192, 159);
+    border: solid 1px rgb(0, 255, 0);
+}
+
+
+
+.cell.grass {
+    background-image: url(assets/grass.avif);
+    background-size: cover;
+    border: solid 1px rgb(31, 175, 31);
 }
 
 .cell.treasure {
