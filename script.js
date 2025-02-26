@@ -331,6 +331,8 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
             if (newPlayerIndex == dragon.index) {
                 newDragonIndex = lostLife2();
                 dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
+
+
             } else if (life == 0) {
                 gameOver();
             }
@@ -341,10 +343,16 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
     if (playerIndex == treasureIndex) {
         // success();
         refreshTreasure();
-        let dragon = dragons[Math.floor(Math.random() * dragons.length)]
-        console.log(dragon);
+        // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
+        // let dragon = dragons[Math.floor(Math.random() * dragons.length)]
+        let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
+        let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
+        dragon.isActive = true;
         insertDragon(dragon.index, dragon.className);
+        console.log(treasureIndex, dragon.index);
+        // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
     }
+
 });
 // });
 
