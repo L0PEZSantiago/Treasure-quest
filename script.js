@@ -306,7 +306,7 @@ document.addEventListener('keydown', (event) => {
 
     movementsSound();
     if (life == 1) {
-        myAudio.playbackRate = 10.5;
+        myAudio.playbackRate = 1.5;
     }
 
     if (cellArray[newPlayerIndex].classList.contains('rock')) {
@@ -398,7 +398,7 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
     }
 
     if (life == 1){
-        myAudio.playbackRate=10.5;
+        myAudio.playbackRate=1.5;
     } 
 
     playerIndex = changePlayerIndex();
