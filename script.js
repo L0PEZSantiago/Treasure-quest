@@ -365,6 +365,7 @@ document.addEventListener('keydown', (event) => {
 }); // Fin de la gestion des touches
 
 
+
 // ------------------------- VERSION MOBILE ------------------------------ //
 document.querySelector('.gamepad').addEventListener('click', (e) => {
 
