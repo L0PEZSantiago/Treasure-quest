@@ -1,7 +1,8 @@
 // document.addEventListener('DOMContentLoaded', (e) => {
 // Ci-dessous le script JS pour gérer la génération de la grille et le placement du coffre, des rochers et du trésor.
-async function playMusic() {
-    let myAudio = document.querySelector('audio');
+let myAudio = document.querySelector('audio');
+
+(async function () {
     myAudio.src = 'Zelda Main Theme Song.mp3';
     myAudio.volume = 0.2;
     await myAudio.play();
@@ -9,9 +10,10 @@ async function playMusic() {
     myAudio.autoplay = true;
     myAudio.controls = true;
     myAudio.preload = 'auto';
-};
+})();
 
-playMusic();
+
+
 
 function treasureFounded() {
     const chestSound = new Audio('arcade-ui-30-229499.mp3'); // Assurez-vous que le chemin est correct
@@ -25,20 +27,43 @@ function movementsSound() {
     moveSound.play();
 }
 
+function dragonRoarSound() {
+    const dragonRoar = new Audio('dragon-hurt-47161.mp3');
+    dragonRoar.volume = 1;
+    dragonRoar.play();
+}
+
 let btnUp = document.querySelector('.btnUp');
 let btnDown = document.querySelector('.btnDown');
 let btnLeft = document.querySelector('.btnLeft');
 let btnRight = document.querySelector('.btnRight');
 let grid = document.querySelector('.grid');
+let input = document.querySelector('input');
+let btnStart = document.querySelector('.btn-set-difficulty');
 
 let dragons = [];
 let existingIndex = [];
 let life = 3;
 let countTreasure = 0;
 let heartArray = Array.from(document.querySelectorAll('i'));
-let totalForWin = 8;
-
+let totalForWin = input.value;
 treasuresDiv = document.querySelector('.treasures');
+
+btnStart.addEventListener('click', () => {
+    totalForWin = input.value;
+    localStorage.setItem('totalForWin', totalForWin);
+    document.querySelector('.difficulty').style.display = 'none';
+    location.reload();
+})
+
+// Je dois faire en sorte que quand j'ai choisi la quantité, la page se recharge et le jeu commence
+
+if (localStorage.getItem('totalForWin')) {
+    totalForWin = localStorage.getItem('totalForWin');
+    document.querySelector('.difficulty').style.display = 'none';
+    // Je dois supprimer le localStorage une fois qu'on a fait son choix
+    localStorage.removeItem('totalForWin');
+}
 
 for (let i = 0; i < totalForWin; i++) {
     treasuresDiv.innerHTML += `<img src="assets/treasure.png" alt="treasure">
@@ -110,8 +135,12 @@ function insertDragon(dragonIndex, className) {
 
 createDragon(randomIndex(), 'Dragon', 'blue-dragoon');
 createDragon(randomIndex(), 'Dragon', 'purple-dragoon');
+createDragon(randomIndex(), 'Dragon', 'purple-dragoon');
+createDragon(randomIndex(), 'Dragon', 'red-dragoon');
 createDragon(randomIndex(), 'Dragon', 'green-dragoon');
 createDragon(randomIndex(), 'Dragon', 'orange-dragoon');
+createDragon(randomIndex(), 'Dragon', 'orange-dragoon');
+createDragon(randomIndex(), 'Dragon', 'yellow-dragoon');
 createDragon(randomIndex(), 'Dragon', 'yellow-dragoon');
 createDragon(randomIndex(), 'Boss', 'red-dragoon');
 
@@ -129,7 +158,7 @@ function createEnvironment(nbrOfElements , className) {
         while (existingIndex.includes(index) || index == playerIndex+1 || index == playerIndex+20) {
             index = randomIndex();
         }
-        console.log(`Ajout de ${className} à l'indice ${index}`);
+        // console.log(`Ajout de ${className} à l'indice ${index}`);
         cellArray[index].classList.add(className);
         existingIndex.push(index);
         count++;
@@ -209,7 +238,7 @@ function changePlayerIndex() {
 function lostLife2() {
     heartArray[life - 1].classList.add('lost');
     life--;
-    newDragonIndex = randomIndex();
+    let newDragonIndex = randomIndex();
     life == 1 ? heartArray[0].classList.add('last') : false;
     return newDragonIndex;
 }
@@ -223,7 +252,10 @@ function success() {
     grid.classList.toggle('success')
     grid.innerHTML = `<h2>Bravo, vous avez trouvé tous les trésors!</h2>
                                 <button class="btn-replay">Rejouer!</button>`;
-
+    document.querySelector('audio').pause();
+    document.querySelector('.lifes').style.display = 'none';
+    document.querySelector('.treasures').style.display = 'none';
+    document.querySelector('.gamepad').style.display = 'none';
     const btn = document.querySelector('.btn-replay');
     btn.addEventListener('click', () => {
         location.reload();
@@ -273,6 +305,9 @@ document.addEventListener('keydown', (event) => {
     }
 
     movementsSound();
+    if (life == 1) {
+        myAudio.playbackRate = 10.5;
+    }
 
     if (cellArray[newPlayerIndex].classList.contains('rock')) {
         return;
@@ -296,17 +331,20 @@ document.addEventListener('keydown', (event) => {
             dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
 
             if (newPlayerIndex == dragon.index) {
+                dragonRoarSound();
                 newDragonIndex = lostLife2();
                 dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
 
-
+                // Si le joueur perd une vie, on le met en rouge
+                // cellArray[newPlayerIndex].style.backgroundf = 'rgb(255, 0, 0)';
+                
             } else if (life == 0) {
                 gameOver();
             }
         }
     });
 
-
+   
 
     // Gagner si le joueur  trouve les 3 trésors
     if (playerIndex == treasureIndex) {
@@ -319,8 +357,7 @@ document.addEventListener('keydown', (event) => {
         let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
         let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
         dragon.isActive = true;
-        insertDragon(dragon.index, dragon.className);
-        console.log(treasureIndex, dragon.index);
+        dragon.index =insertDragon(dragon.index, dragon.className);
         // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
     }
 
@@ -359,6 +396,10 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         return;
     }
 
+    if (life == 1){
+        myAudio.playbackRate=10.5;
+    } 
+
     playerIndex = changePlayerIndex();
 
 
@@ -367,10 +408,11 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
             let newDragonIndex = dragonMoves2(dragon.index);
             dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
 
-            if (newPlayerIndex == dragon.index) {
+            if (playerIndex == dragon.index) {
+                dragonRoarSound();
                 newDragonIndex = lostLife2();
                 dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
-
+                
 
             } else if (life == 0) {
                 gameOver();
@@ -388,8 +430,7 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
         let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
         dragon.isActive = true;
-        insertDragon(dragon.index, dragon.className);
-        console.log(treasureIndex, dragon.index);
+        dragon.index = insertDragon(dragon.index, dragon.className);
         // insertDragon(Math.random.dragons.index, Math.random.dragons.className);
     }
 });

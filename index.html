@@ -9,21 +9,34 @@
     <script src="script.js" defer></script>
 </head>
    <body>
-    <audio src=""></audio>
-    <div class="lifes"><i class="fa-solid fa-heart" id="lastHeart"></i>
-        <i class="fa-solid fa-heart"></i><i class="fa-solid fa-heart"></i>
-    </div>
-     <div class="treasures">
+<div class="treasuresAndLifes">
+    <div class="treasures">
         
+    </div>
+    <div class="lifes">
+        <i class="fa-solid fa-heart" id="lastHeart"></i>
+        <i class="fa-solid fa-heart"></i>
+        <i class="fa-solid fa-heart"></i>
+    </div>
+</div>
+     <div class="difficulty">
+        <h1>Sélectionne une difficulté</h1>
+        
+        <input type="number" name="difficulty" id="difficulty" min="1" max="10">
+        <button class="btn-set-difficulty">Go !</button>
+    
      </div>
         <div id="gameGrid" class="grid">
             <!-- Les cellules seront générées par JavaScript ci-dessous-->
         </div>
         <div class="gamepad">
-            <button class="btnLeft">LEFT</button>
             <button class="btnUp">UP</button>
-            <button class="btnDown">DOWN</button>
+            <div class="leftAndRight">
+            <button class="btnLeft">LEFT</button>
             <button class="btnRight">RIGHT</button>
+            </div>
+            <button class="btnDown">DOWN</button>
         </div>
+        <audio src=""></audio>
     </body>
 </html>

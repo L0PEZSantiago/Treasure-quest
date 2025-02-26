@@ -7,9 +7,9 @@
     background-position: center;
 }
 
-/* html {
+html, body {
     height: 100vh;
-} */
+}
 
 body {
     background-color: #AAAAAA;
@@ -17,22 +17,89 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    padding: 1.2rem;
+}
+
+.difficulty {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 30vw; 
+    height: 40vh;
+    background-color: yellow;
+    border-radius: 50px;
+    gap: 40px;
+    border: green solid 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: green;
+    z-index: 9999;
+    text-align: center;
+}
+
+.difficulty input {
+    text-align: center;
+    font-size: 1.5rem;
+    width: 100px;
+    height: 30px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    color: green;
+    background-color: white;
+    padding: 1.2rem;
+    border: green solid 3px;
+}
+
+.difficulty button {
+    font-size: 1.5rem;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    padding: 0.8rem 5rem;
+    background-color: ghostwhite;
+    color: green;
+    text-align: center;
+    cursor: pointer;
+    border: green solid 3px;
+}
+
+.difficulty button:hover {
+    color: white;
+    background-color: rgb(38, 200, 38);
+}
+
+.difficulty.close {
+    display: none;
 }
 
 audio {
     position: absolute;
     bottom: 0.3rem;
+    display: none;
+}
+
+.treasuresAndLifes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 15px 0;
+}
+
+.treasures {
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .lifes {
-    position: absolute;
-    top: .2rem;
-    right: .2rem;
-    height: fit-content;
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    margin: 10px;
 }
 
 .lifes i {
@@ -50,17 +117,6 @@ audio {
     animation: scaleInOut 2s ease-in-out;
 }
 
-.treasures {
-    position: absolute;
-    bottom: calc(30vh - 42px);
-    right: .2rem;
-    margin: 10px;
-    gap: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 
 .treasures img {
    width: 44px;
@@ -80,7 +136,7 @@ audio {
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
-    margin-top: 1rem;
+    z-index: 1;
 }
 .cell {
     width: calc(90vw/20);
@@ -104,8 +160,6 @@ audio {
     background-color: rgb(159, 192, 159);
     border: solid 1px rgb(0, 255, 0);
 }
-
-
 
 .cell.grass {
     background-image: url(assets/grass.avif);
@@ -180,7 +234,6 @@ audio {
 
 .gamepad {
     display: none;
-    position: absolute;
 }
 
 @keyframes scaleInOut {
@@ -199,6 +252,16 @@ audio {
 
 @media screen and (max-width: 767px) {
    
+    body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0px 10px;
+        gap: 10px;
+    }
     .grid {
         height: 40vh;
         width: 100vw;
@@ -209,6 +272,11 @@ audio {
         height: calc(40vh/20);
     }
 
+
+    .difficulty {
+        width: 90vw
+    }
+    
     .success {
         text-align: center;
         align-items: center;
@@ -216,6 +284,8 @@ audio {
         height: 100vh;
         width: 100vw;
         font-size: 20px;
+        transition: all 0.8s ease-in-out;
+        transform-origin: center;
     }
 
     .btn-replay {
@@ -223,15 +293,27 @@ audio {
         font-size: 16px;
     }
 
-    .lifes {
-        position: relative;
-        flex-direction: row;
+    .treasuresAndLifes {
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
 
     .treasures {
-        position: inherit;
-        flex-direction: row;
+        display: flex;
+        gap: 10px;
+        width: 100vw;
+        flex-wrap: wrap;
     }
+
+   .lifes {
+       display: block;
+       position: static;
+       gap: 10px;
+   }
 
     .lifes i {
         font-size: 40px;
@@ -243,13 +325,20 @@ audio {
 
     .gamepad {
         display: flex;
-        gap: 15px;
-        margin-top: 6rem;
-        position: initial;
+        gap: 10px;
+        position: static;
+        flex-direction: column;
+        align-items: center;
+        height: 250px;
+        width: 250px;
+    }
+
+    .leftAndRight {
+        display: flex;
+        gap: 20px;
     }
     
     .gamepad button {
-        padding: 15px 25px;
         background-color: gray;
         color: #f9fcf9;
         border: none;
@@ -257,14 +346,25 @@ audio {
         border-radius: 12px;
         box-shadow: 5px 5px 5px orangered;
         font-size: 20px;
+        padding: 20px;
     }
 
     .btnUp {
-        position: absolute;
-        transform: translate(4.2rem, -4rem);
+        top: 0;
+        left: calc(50% - 50px);
     }
     .btnDown {
-        position: absolute;
-        transform: translate(3rem, 4rem);
+        bottom: 0;
+        left: calc(50% - 50px);
+    }
+
+    .btnLeft {
+        top: calc(50% - 50px);
+        right: 0;
+    }
+
+    .btnRight {
+        top: calc(50% - 50px);
+        left: 0;
     }
 }
