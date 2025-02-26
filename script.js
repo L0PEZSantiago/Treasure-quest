@@ -36,7 +36,7 @@ let existingIndex = [];
 let life = 3;
 let countTreasure = 0;
 let heartArray = Array.from(document.querySelectorAll('i'));
-let totalForWin = 5;
+let totalForWin = 8;
 
 treasuresDiv = document.querySelector('.treasures');
 
