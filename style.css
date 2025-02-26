@@ -52,7 +52,7 @@ audio {
 
 .treasures {
     position: absolute;
-    bottom: calc(70vh - 42px);
+    bottom: calc(55vh - 42px);
     right: .2rem;
     margin: 10px;
     gap: 5px;

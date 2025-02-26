@@ -279,6 +279,7 @@ document.addEventListener('keydown', (event) => {
         refreshTreasure();
         // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
         // let dragon = dragons[Math.floor(Math.random() * dragons.length)]
+
         let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
         let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
         dragon.isActive = true;
@@ -339,12 +340,12 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         }
     });
 
-
     if (playerIndex == treasureIndex) {
         // success();
         refreshTreasure();
         // Lorsque je trouve un trésor, je crée un nouveau dragon en allant piocher dans mon tableau dragons au hasard
         // let dragon = dragons[Math.floor(Math.random() * dragons.length)]
+
         let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
         let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
         dragon.isActive = true;
@@ -352,7 +353,6 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         console.log(treasureIndex, dragon.index);
         // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
     }
-
 });
 // });
 
