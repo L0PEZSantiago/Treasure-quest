@@ -1,5 +1,9 @@
 // document.addEventListener('DOMContentLoaded', (e) => {
 // Ci-dessous le script JS pour gérer la génération de la grille et le placement du coffre, des rochers et du trésor.
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM chargé"); 
+});
+
 let myAudio = document.querySelector('audio');
 
 (async function () {
@@ -24,8 +28,10 @@ let btnRight = document.querySelector('.btnRight');
 let grid = document.querySelector('.grid');
 let input = document.querySelector('input');
 let btnStart = document.querySelector('.btn-set-difficulty');
+console.log(btnStart);
 
 
+let difficultyMax = 14;
 let dragons = [];
 let existingIndex = [];
 let dragonsClassesNames = ['blue-dragoon', 'green-dragoon', 'orange-dragoon', 'purple-dragoon', 'red-dragoon', 'yellow-dragoon'];
@@ -34,6 +40,7 @@ let totalForWin = input.value;
 treasuresDiv = document.querySelector('.treasures');
 
 btnStart.addEventListener('click', () => {
+    console.log("click");
     totalForWin = input.value;
     localStorage.setItem('totalForWin', totalForWin);
     document.querySelector('.difficulty').style.display = 'none';
