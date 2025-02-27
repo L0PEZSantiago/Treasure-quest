@@ -1,10 +1,9 @@
-// document.addEventListener('DOMContentLoaded', (e) => {
-// Ci-dessous le script JS pour gérer la génération de la grille et le placement du coffre, des rochers et du trésor.
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM chargé"); 
+    console.log("DOM chargé");
+    const index = getRandomIndex();
 });
 
-let myAudio = document.querySelector('audio');
+const myAudio = document.querySelector('audio');
 
 (async function () {
     myAudio.src = 'musics/Zelda Main Theme Song.mp3';
@@ -18,32 +17,32 @@ let myAudio = document.querySelector('audio');
 
 
 
-
-
-
-let btnUp = document.querySelector('.btnUp');
-let btnDown = document.querySelector('.btnDown');
-let btnLeft = document.querySelector('.btnLeft');
-let btnRight = document.querySelector('.btnRight');
-let grid = document.querySelector('.grid');
+const btnUp = document.querySelector('.btnUp');
+const btnDown = document.querySelector('.btnDown');
+const btnLeft = document.querySelector('.btnLeft');
+const btnRight = document.querySelector('.btnRight');
+const grid = document.querySelector('.grid');
 
 let btnStart = document.querySelector('.btn-set-difficulty');
 console.log(btnStart);
 
 
 let difficultyMax = 14;
-let dragons = [];
-let existingIndex = [];
-let dragonsClassesNames = ['blue-dragoon', 'green-dragoon', 'orange-dragoon', 'purple-dragoon', 'red-dragoon', 'yellow-dragoon'];
+const dragons = [];
+const portals = [];
+const bluePortalsIndexs = [];
+const purplePortalsIndexs = [];
+const existingIndex = [];
+const dragonsClassesNames = ['blue-dragoon', 'green-dragoon', 'orange-dragoon', 'purple-dragoon', 'red-dragoon', 'yellow-dragoon'];
 let countTreasure = 0;
 let totalForWin;
-treasuresDiv = document.querySelector('.treasures');
+const treasuresDiv = document.querySelector('.treasures');
 
 btnStart.addEventListener('click', () => {
     const input = document.querySelector('input');
-    totalForWin = input.value ;
-    if (input.value > 14) {
-        input.value = 14;
+    totalForWin = input.value;
+    if (input.value > 20) {
+        input.value = 20;
         alert('Veuillez choisir une valeur comprise entre 1 et 14');
         console.log("click", totalForWin);
         location.reload();
@@ -93,6 +92,26 @@ class Dragon {
     }
 };
 
+class Portal {
+    constructor(index, color, className) {
+        this.index = index;
+        this.color = color;
+        this.className = className;
+
+        portals.push(this);
+        if (this.color === 'blue') {
+            bluePortalsIndexs.push(index);
+        } else {
+            purplePortalsIndexs.push(index);
+        }
+
+        calculateCol(this.index);
+        calculateRow(this.index);
+    } 
+
+}
+
+
 // Générer une grille de 20x20
 for (let i = 0; i < 400; i++) {
     let cell = document.createElement('div');
@@ -106,18 +125,83 @@ const treasuresImgArray = Array.from(document.querySelectorAll('.treasures img')
 
 
 // Ajouter le player
-playerIndex = cellArray[0];
+let playerIndex = cellArray[0];
 playerIndex.classList.add('player');
 existingIndex.push(0);
+
+// Je crée les violets en premier pour pouvoir les comparer avec les bleus
+let purplePortal = new Portal(getRandomIndex(), "purple", "short-portal-purple");
+let purplePortal2 = new Portal(getRandomIndex(), "purple", "short-portal-purple");
+let bluePortal = new Portal(getRandomIndex(), "blue", "short-portal-blue");
+let bluePortal2 = new Portal(getRandomIndex(), "blue", "short-portal-blue");
+
+
+
+while (purplePortal.index == 0){
+    purplePortal.index = getRandomIndex();
+};
+
+while(calculateRow(purplePortal.index) > 8 || calculateCol(purplePortal.index) > 8) {
+    console.log(calculateRow(purplePortal.index), calculateCol(purplePortal.index));
+    purplePortal.index = getRandomIndex();
+}
+
+while(calculateRow(purplePortal2.index) < 13 || calculateCol(purplePortal2.index) < 13) {
+    console.log(calculateRow(purplePortal2.index), calculateCol(purplePortal2.index));
+    purplePortal2.index = getRandomIndex();
+}
+
+while(calculateRow(bluePortal.index) > 8 || calculateCol(bluePortal.index) < 13) {
+    console.log(calculateRow(bluePortal.index), calculateCol(bluePortal.index));
+    bluePortal.index = getRandomIndex();
+}
+
+while(calculateRow(bluePortal2.index) < 13 || calculateCol(bluePortal2.index) > 8) {
+    console.log(calculateRow(bluePortal2.index), calculateCol(bluePortal2.index));
+    bluePortal2.index = getRandomIndex();
+}
+
+
+console.log("Position finale:",calculateRow(purplePortal.index), calculateCol(purplePortal.index));
+
+
+// if (totalForWin > 7) {
+//     portals.forEach(portalIndex => {
+//         if (portalIndex == purplePortal.index || portalIndex == purplePortal2.index) {
+//             cellArray[portalIndex].classList.add('short-portal-purple');
+//             existingIndex.push(portalIndex);
+//         } else if (portalIndex == purplePortal.index || portalIndex == bluePortal2.index) {
+//             cellArray[portalIndex].classList.add('short-portal-blue');
+//             existingIndex.push(portalIndex);
+//         }
+//     })
+// }
+if (totalForWin > 7) {
+    cellArray[purplePortal.index].classList.add('short-portal-purple');
+    existingIndex.push(purplePortal.index);
+    cellArray[purplePortal2.index].classList.add('short-portal-purple');
+    existingIndex.push(purplePortal2.index);
+    cellArray[bluePortal.index].classList.add('short-portal-blue');
+    existingIndex.push(bluePortal.index);
+    cellArray[bluePortal2.index].classList.add('short-portal-blue');
+    existingIndex.push(bluePortal2.index);
+} else {
+    cellArray[purplePortal.index].classList.add('short-portal-purple');
+    existingIndex.push(purplePortal.index);
+    cellArray[purplePortal2.index].classList.add('short-portal-purple');
+    existingIndex.push(purplePortal2.index);
+}
+
+
 let heartIndex = getRandomIndex();
 
 // Ajouter le trésor aléatoirement
 
 let treasureIndex = getRandomIndex();
 
-while (treasureIndex == 0) { treasureIndex = getRandomIndex(); }
+while (treasureIndex == existingIndex.includes(treasureIndex)) { treasureIndex = getRandomIndex(); }
 
-if (treasureIndex != 0) {
+if (treasureIndex != existingIndex.includes(treasureIndex)) {
     cellArray[treasureIndex].classList.add('treasure');
     existingIndex.push(treasureIndex);
 }
@@ -138,7 +222,7 @@ insertDragon(dragon.index, dragon.className);
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
 
-createEnvironment(50, 'rock');
+createEnvironment(40, 'rock');
 createEnvironment(30, 'grass');
 
 
@@ -174,6 +258,17 @@ function dragonRoarSound() {
     dragonRoar.volume = 0.5;
     dragonRoar.play();
 }
+
+function calculateRow(portalIndex){
+    return Math.floor(portalIndex / 20);
+}
+
+function calculateCol(portalIndex){
+    return portalIndex % 20
+}
+function getRandomIndex() {
+    return Math.floor(Math.random() * cellArray.length);
+}
 // Création d'une boucle pour ajouter des rochers aléatoirement ou autre objet selon sa classe
 function createEnvironment(numElements, className) {
     let placedElements = 0;
@@ -186,9 +281,6 @@ function createEnvironment(numElements, className) {
         existingIndex.push(index);
         placedElements++;
     }
-}
-function getRandomIndex() {
-    return Math.floor(Math.random() * cellArray.length);
 }
 
 // Pour créer un dragon précis
@@ -344,6 +436,27 @@ document.addEventListener('keydown', (event) => {
 
     playerIndex = changePlayerIndex();
 
+    
+    console.log(playerIndex, purplePortal.index);
+    // Si joueurIndex == purplePortal.index, new joueurIndex = purplePortal2.index
+    let recentlyTeleported = false;
+    function teleportation(portal, portal2) {
+        if (playerIndex === portal.index && !recentlyTeleported) {
+            recentlyTeleported = true;
+            newPlayerIndex = portal2.index;
+            cellArray[playerIndex].classList.remove('player');
+            cellArray[newPlayerIndex].classList.add('player');
+            playerIndex = newPlayerIndex;
+            setTimeout(() => { recentlyTeleported = false; }, 300);
+            return playerIndex;
+        }
+    }
+     
+    teleportation(purplePortal, purplePortal2);
+    teleportation(purplePortal2, purplePortal);
+    teleportation(bluePortal, bluePortal2);
+    teleportation(bluePortal2, bluePortal);
+     
     // Index du joueur divisé par 20, ou modulo 20 on arrondit le résultat si division, et cela donne la ligne et la colonne du joueur 
 
     dragons.forEach(dragon => {
@@ -399,6 +512,7 @@ document.addEventListener('keydown', (event) => {
             heartArray[life - 1].classList.add('getLife');
             cellArray[heartIndex].classList.remove('heart');
         }
+
     }
 }); // Fin de la gestion des touches
 

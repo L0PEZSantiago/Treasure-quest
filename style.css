@@ -151,6 +151,14 @@ audio {
     grid-row: 1 span;
 }
 
+.cell.short-portal-blue {
+    background-image: url(assets/short-portal-blue.png);
+}
+
+.cell.short-portal-purple {
+    background-image: url(assets/short-portal-purple.png);
+}
+
 .cell.rock {
     background-image: url(assets/rock.png);
 }
