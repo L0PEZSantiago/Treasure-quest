@@ -27,6 +27,11 @@ let btnLeft = document.querySelector('.btnLeft');
 let btnRight = document.querySelector('.btnRight');
 let grid = document.querySelector('.grid');
 let input = document.querySelector('input');
+if (input.value > 14) {
+    input.value = 14;
+    alert('Veuillez choisir une valeur comprise entre 1 et 14');
+    location.reload();
+}
 let btnStart = document.querySelector('.btn-set-difficulty');
 console.log(btnStart);
 
@@ -386,6 +391,8 @@ document.addEventListener('keydown', (event) => {
         } else {
             life++;
             healingSound();
+            heartArray[0].classList.contains('last') ? heartArray[0].classList.remove('last') : false;
+            !heartArray[0].classList.contains('last') ? myAudio.playbackRate = 1 : false;
             heartArray[life - 1].classList.remove('lost');
             heartArray[life - 1].classList.add('getLife');
             cellArray[heartIndex].classList.remove('heart');
@@ -477,6 +484,7 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
         } else {
             life++;
             healingSound();
+            heartArray[0].classList.contains('last') ? heartArray[0].classList.remove('last') : false;
             heartArray[life - 1].classList.remove('lost');
             heartArray[life - 1].classList.add('getLife');
             cellArray[heartIndex].classList.remove('heart');
