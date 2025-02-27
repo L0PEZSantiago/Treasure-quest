@@ -26,12 +26,7 @@ let btnDown = document.querySelector('.btnDown');
 let btnLeft = document.querySelector('.btnLeft');
 let btnRight = document.querySelector('.btnRight');
 let grid = document.querySelector('.grid');
-let input = document.querySelector('input');
-if (input.value > 14) {
-    input.value = 14;
-    alert('Veuillez choisir une valeur comprise entre 1 et 14');
-    location.reload();
-}
+
 let btnStart = document.querySelector('.btn-set-difficulty');
 console.log(btnStart);
 
@@ -41,12 +36,19 @@ let dragons = [];
 let existingIndex = [];
 let dragonsClassesNames = ['blue-dragoon', 'green-dragoon', 'orange-dragoon', 'purple-dragoon', 'red-dragoon', 'yellow-dragoon'];
 let countTreasure = 0;
-let totalForWin = input.value;
+let totalForWin;
 treasuresDiv = document.querySelector('.treasures');
 
 btnStart.addEventListener('click', () => {
-    console.log("click");
-    totalForWin = input.value;
+    const input = document.querySelector('input');
+    totalForWin = input.value ;
+    if (input.value > 14) {
+        input.value = 14;
+        alert('Veuillez choisir une valeur comprise entre 1 et 14');
+        console.log("click", totalForWin);
+        location.reload();
+        return totalForWin;
+    }
     localStorage.setItem('totalForWin', totalForWin);
     document.querySelector('.difficulty').style.display = 'none';
     location.reload();
@@ -136,7 +138,7 @@ insertDragon(dragon.index, dragon.className);
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
 
-createEnvironment(50, 'rock');
+createEnvironment(100, 'rock');
 createEnvironment(30, 'grass');
 
 
