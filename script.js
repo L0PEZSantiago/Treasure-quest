@@ -222,7 +222,7 @@ insertDragon(dragon.index, dragon.className);
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
 
-createEnvironment(40, 'rock');
+createEnvironment(65, 'rock');
 createEnvironment(30, 'grass');
 
 
@@ -520,7 +520,7 @@ document.addEventListener('keydown', (event) => {
 
 // ------------------------- VERSION MOBILE ------------------------------ //
 document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
-
+    let newPlayerIndex;
     switch (e.target.className) {
         case 'btnUp':
             newPlayerIndex = playerIndex - 20;
@@ -553,8 +553,28 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
         myAudio.playbackRate = 1.5;
     }
 
-    playerIndex = changePlayerIndex();
+    cellArray[playerIndex].classList.remove('player');
+    cellArray[newPlayerIndex].classList.add('player');
+    playerIndex = newPlayerIndex;
 
+    let recentlyTeleported = false;
+    function teleportation(portal, portal2) {
+        if (playerIndex === portal.index && !recentlyTeleported) {
+            recentlyTeleported = true;
+            newPlayerIndex = portal2.index;
+            cellArray[playerIndex].classList.remove('player');
+            cellArray[newPlayerIndex].classList.add('player');
+            playerIndex = newPlayerIndex;
+            setTimeout(() => { recentlyTeleported = false; }, 300);
+            return playerIndex;
+        }
+    }
+     
+    teleportation(purplePortal, purplePortal2);
+    teleportation(purplePortal2, purplePortal);
+    teleportation(bluePortal, bluePortal2);
+    teleportation(bluePortal2, bluePortal);
+   
 
     dragons.forEach(dragon => {
         if (dragon.isActive) {
