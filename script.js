@@ -138,7 +138,7 @@ insertDragon(dragon.index, dragon.className);
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
 
-createEnvironment(100, 'rock');
+createEnvironment(50, 'rock');
 createEnvironment(30, 'grass');
 
 
