@@ -3,8 +3,8 @@
 let myAudio = document.querySelector('audio');
 
 (async function () {
-    myAudio.src = 'Zelda Main Theme Song.mp3';
-    myAudio.volume = 0.2;
+    myAudio.src = 'musics/Zelda Main Theme Song.mp3';
+    myAudio.volume = 0.05;
     await myAudio.play();
     myAudio.loop = true;
     myAudio.autoplay = true;
@@ -15,23 +15,7 @@ let myAudio = document.querySelector('audio');
 
 
 
-function treasureFounded() {
-    const chestSound = new Audio('arcade-ui-30-229499.mp3'); // Assurez-vous que le chemin est correct
-    chestSound.volume = 1; // Ajustez le volume selon vos besoins
-    chestSound.play();
-}
 
-function movementsSound() {
-    const moveSound = new Audio('movement-101711.mp3');
-    moveSound.volume = 1;
-    moveSound.play();
-}
-
-function dragonRoarSound() {
-    const dragonRoar = new Audio('dragon-hurt-47161.mp3');
-    dragonRoar.volume = 1;
-    dragonRoar.play();
-}
 
 let btnUp = document.querySelector('.btnUp');
 let btnDown = document.querySelector('.btnDown');
@@ -41,11 +25,11 @@ let grid = document.querySelector('.grid');
 let input = document.querySelector('input');
 let btnStart = document.querySelector('.btn-set-difficulty');
 
+
 let dragons = [];
 let existingIndex = [];
-let life = 3;
+let dragonsClassesNames = ['blue-dragoon', 'green-dragoon', 'orange-dragoon', 'purple-dragoon', 'red-dragoon', 'yellow-dragoon'];
 let countTreasure = 0;
-let heartArray = Array.from(document.querySelectorAll('i'));
 let totalForWin = input.value;
 treasuresDiv = document.querySelector('.treasures');
 
@@ -70,6 +54,19 @@ for (let i = 0; i < totalForWin; i++) {
 `;
 }
 
+// QUANTITE DE VIE
+let life;
+
+totalForWin <= 5 ? life = 3 : totalForWin > 5 && totalForWin <= 8 ? life = 4 : life = 5;
+let maxLife = life;
+
+for (let i = 0; i < life; i++) {
+    document.querySelector('.lifes').innerHTML += `<i class="fa-solid fa-heart"></i>
+`;
+}
+let heartArray = Array.from(document.querySelectorAll('i'));
+
+
 
 // Je fais ma classe dragon, quand je crée un dragon, il est push dans le tableau dragons ci-dessus
 class Dragon {
@@ -78,10 +75,9 @@ class Dragon {
         this.type = type;
         this.className = className;
         this.isActive = isActive;
-        dragons.push(this);
+        dragons[dragons.length] = this; // push is slower than direct assignment
     }
 };
-
 
 // Générer une grille de 20x20
 for (let i = 0; i < 400; i++) {
@@ -99,15 +95,13 @@ const treasuresImgArray = Array.from(document.querySelectorAll('.treasures img')
 playerIndex = cellArray[0];
 playerIndex.classList.add('player');
 existingIndex.push(0);
-
+let heartIndex = getRandomIndex();
 
 // Ajouter le trésor aléatoirement
 
-let treasureIndex = randomIndex();
+let treasureIndex = getRandomIndex();
 
-while (treasureIndex == 0) {
-    treasureIndex = randomIndex();
-}
+while (treasureIndex == 0) { treasureIndex = getRandomIndex(); }
 
 if (treasureIndex != 0) {
     cellArray[treasureIndex].classList.add('treasure');
@@ -117,32 +111,10 @@ if (treasureIndex != 0) {
 
 
 // Ma fonction qui me permet de créer plusieurs dragons, je leur donne un index random au départ
-function createDragon(index, type, className) {
-    return new Dragon(index, type, className);
-}
+createRandomDragons(100);
 
-// Ma fonction qui me permet de donner un index non existant au dragon, et on l'insère dans le tableau cellArray, il prendra la place de son indice-même
-// Et biensur, lorsqu'il sera inséré, il sera push dans le tableau existingIndex
-function insertDragon(dragonIndex, className) {
-    while (existingIndex.includes(dragonIndex)) {
-        dragonIndex = randomIndex();
-    }
-    cellArray[dragonIndex].classList.add(className);
-    existingIndex.push(dragonIndex);
-    return dragonIndex; // Je retourne l'index du dragon au cas où je voudrais le manipuler
-}
+console.log(dragons);
 
-
-createDragon(randomIndex(), 'Dragon', 'blue-dragoon');
-createDragon(randomIndex(), 'Dragon', 'purple-dragoon');
-createDragon(randomIndex(), 'Dragon', 'purple-dragoon');
-createDragon(randomIndex(), 'Dragon', 'red-dragoon');
-createDragon(randomIndex(), 'Dragon', 'green-dragoon');
-createDragon(randomIndex(), 'Dragon', 'orange-dragoon');
-createDragon(randomIndex(), 'Dragon', 'orange-dragoon');
-createDragon(randomIndex(), 'Dragon', 'yellow-dragoon');
-createDragon(randomIndex(), 'Dragon', 'yellow-dragoon');
-createDragon(randomIndex(), 'Boss', 'red-dragoon');
 
 let dragon = dragons[Math.floor(Math.random() * dragons.length)]
 dragon.isActive = true;
@@ -151,21 +123,10 @@ insertDragon(dragon.index, dragon.className);
 
 
 // Création d'une boucle pour ajouter des rochers aléatoirement
-function createEnvironment(nbrOfElements , className) {
-    let count = 0;
-    while (count != nbrOfElements) {
-        let index = randomIndex();
-        while (existingIndex.includes(index) || index == playerIndex+1 || index == playerIndex+20) {
-            index = randomIndex();
-        }
-        // console.log(`Ajout de ${className} à l'indice ${index}`);
-        cellArray[index].classList.add(className);
-        existingIndex.push(index);
-        count++;
-    }
-}
+
 createEnvironment(50, 'rock');
-createEnvironment(60 , 'grass');
+createEnvironment(30, 'grass');
+
 
 
 
@@ -175,45 +136,91 @@ playerIndex = cellArray.indexOf(player);
 
 
 // ----------------------------------- FONCTIONS ------------------------------------ //
-function randomIndex() {
-    let randomIndex = Math.floor(Math.random() * cellArray.length);
-    return randomIndex;
+
+function healingSound() {
+    const healingSound = new Audio('sounds/magic_spell_10-39689.mp3');
+    healingSound.volume = 0.7;
+    healingSound.play();
+}
+
+function treasureFounded() {
+    const chestSound = new Audio('sounds/arcade-ui-30-229499.mp3'); // Assurez-vous que le chemin est correct
+    chestSound.volume = 0.8; // Ajustez le volume selon vos besoins
+    chestSound.play();
+}
+
+function movementsSound() {
+    const moveSound = new Audio('sounds/movement-101711.mp3');
+    moveSound.volume = 0.8;
+    moveSound.play();
+}
+
+function dragonRoarSound() {
+    const dragonRoar = new Audio('sounds/dragon-hurt-47161.mp3');
+    dragonRoar.volume = 0.5;
+    dragonRoar.play();
+}
+// Création d'une boucle pour ajouter des rochers aléatoirement ou autre objet selon sa classe
+function createEnvironment(numElements, className) {
+    let placedElements = 0;
+    while (placedElements < numElements) {
+        let index = getRandomIndex();
+        while (existingIndex.includes(index) || index === playerIndex + 1 || index === playerIndex + 20) {
+            index = getRandomIndex();
+        }
+        cellArray[index].classList.add(className);
+        existingIndex.push(index);
+        placedElements++;
+    }
+}
+function getRandomIndex() {
+    return Math.floor(Math.random() * cellArray.length);
+}
+
+// Pour créer un dragon précis
+function createDragon(index, type, className) {
+    return new Dragon(index, type, className);
+}
+
+// Ma fonction qui me permet de donner un index non existant au dragon, et on l'insère dans le tableau cellArray, il prendra la place de son indice-même
+// Et biensur, lorsqu'il sera inséré, il sera push dans le tableau existingIndex
+function insertDragon(dragonIndex, className) {
+    while (existingIndex.includes(dragonIndex)) {
+        dragonIndex = getRandomIndex();
+    }
+    if (!existingIndex.includes(dragonIndex)) {
+        cellArray[dragonIndex].classList.add(className);
+        existingIndex.push(dragonIndex);
+    }
+    return dragonIndex; // Je retourne l'index du dragon au cas où je voudrais le manipuler
+}
+
+function createRandomDragons(quantity) {
+    for (let i = 0; i < quantity; i++) {
+        createDragon(getRandomIndex(), 'Dragon', dragonsClassesNames[Math.floor(Math.random() * dragonsClassesNames.length)]);
+    }
 }
 
 function calcRowDiff2(dragonIndex) {
-    let playerRow = Math.floor(playerIndex / 20);
-    let dragonRow = Math.floor(dragonIndex / 20);
-    let rowDiff = playerRow - dragonRow;
-
-    return rowDiff;
+    return Math.floor((playerIndex - dragonIndex) / 20);
+    // Comme si je faisais playerIndex / 20, dragonIndex /20 pour avoir à chacun sa ligne puis je soustrait le résultat de chaque opération et je retourne le resultat -- RowDiff
 }
 
 function calcColDiff2(dragonIndex) {
-    let playerCol = playerIndex % 20;
-    let dragonCol = dragonIndex % 20;
-    let colDiff = playerCol - dragonCol;
-
-    return colDiff;
+    return (playerIndex % 20) - (dragonIndex % 20);
 }
 
 function dragonMoves2(dragonIndex) {
-    let moves2 = [];
-    if (calcRowDiff2(dragonIndex) !== 0) {
-        // Déplacement vertical
-        moves2.push(dragonIndex + (calcRowDiff2(dragonIndex) > 0 ? 20 : -20));
-    }
-    if (calcColDiff2(dragonIndex) !== 0) {
-        moves2.push(dragonIndex + (calcColDiff2(dragonIndex) > 0 ? 1 : -1));
-    }
-    if (moves2.length === 0) {
-        return dragonIndex;
-    }
-    // Choisir aléatoirement une option parmi celles disponibles
-    let newDragonIndex = moves2[Math.floor(Math.random() * moves2.length)];
+    const rowDiff = calcRowDiff2(dragonIndex);
+    const colDiff = calcColDiff2(dragonIndex);
+    if (rowDiff === 0 && colDiff === 0) return dragonIndex;
 
-    return newDragonIndex;
+    const potentialMoves = [];
+    if (rowDiff !== 0) potentialMoves.push(dragonIndex + (rowDiff > 0 ? 20 : -20));
+    if (colDiff !== 0) potentialMoves.push(dragonIndex + (colDiff > 0 ? 1 : -1));
+
+    return potentialMoves[Math.floor(Math.random() * potentialMoves.length)];
 }
-
 
 // Changer l'index du dragon
 function changeDragonIndex(dragonIndex, newDragonIndex, className) {
@@ -236,11 +243,11 @@ function changePlayerIndex() {
 }
 
 function lostLife2() {
+    heartArray[life - 1].classList.remove('getLife');
     heartArray[life - 1].classList.add('lost');
     life--;
-    let newDragonIndex = randomIndex();
     life == 1 ? heartArray[0].classList.add('last') : false;
-    return newDragonIndex;
+    return getRandomIndex();
 }
 
 function gameOver() {
@@ -268,10 +275,10 @@ function refreshTreasure() {
     treasuresImgArray[countTreasure - 1].classList.add('finded');
     countTreasure == totalForWin ? success() : false;
     cellArray[treasureIndex].classList.remove('treasure');
-    treasureIndex = randomIndex();
+    treasureIndex = getRandomIndex();
 
     while (treasureIndex == playerIndex || existingIndex.includes(treasureIndex)) {
-        treasureIndex = randomIndex();
+        treasureIndex = getRandomIndex();
     } // Fin de la boucle while
     cellArray[treasureIndex].classList.add('treasure');
     existingIndex.push(treasureIndex);
@@ -337,14 +344,12 @@ document.addEventListener('keydown', (event) => {
 
                 // Si le joueur perd une vie, on le met en rouge
                 // cellArray[newPlayerIndex].style.backgroundf = 'rgb(255, 0, 0)';
-                
+
             } else if (life == 0) {
                 gameOver();
             }
         }
     });
-
-   
 
     // Gagner si le joueur  trouve les 3 trésors
     if (playerIndex == treasureIndex) {
@@ -357,17 +362,34 @@ document.addEventListener('keydown', (event) => {
         let dragonsNotActive = dragons.filter(dragon => !dragon.isActive);
         let dragon = dragonsNotActive[Math.floor(Math.random() * dragonsNotActive.length)];
         dragon.isActive = true;
-        dragon.index =insertDragon(dragon.index, dragon.className);
+        dragon.index = insertDragon(dragon.index, dragon.className);
         // insertDragon(Math.random.dragons.index, Math.random.dragons.className);  
+
+        if (countTreasure == 3 || countTreasure == 6 || countTreasure == 9 || countTreasure == 11 || countTreasure == 13) {
+            while (existingIndex.includes(heartIndex)) { heartIndex = getRandomIndex(); }
+            cellArray[heartIndex].classList.add('heart');
+            console.log(`Coeur ajouté en ${heartIndex}`);
+            return heartIndex;
+        }
     }
 
-
+    if (playerIndex == heartIndex) {
+        if (life == maxLife) {
+            return
+        } else {
+            life++;
+            healingSound();
+            heartArray[life - 1].classList.remove('lost');
+            heartArray[life - 1].classList.add('getLife');
+            cellArray[heartIndex].classList.remove('heart');
+        }
+    }
 }); // Fin de la gestion des touches
 
 
 
 // ------------------------- VERSION MOBILE ------------------------------ //
-document.querySelector('.gamepad').addEventListener('click', (e) => {
+document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
 
     switch (e.target.className) {
         case 'btnUp':
@@ -397,9 +419,9 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         return;
     }
 
-    if (life == 1){
-        myAudio.playbackRate=1.5;
-    } 
+    if (life == 1) {
+        myAudio.playbackRate = 1.5;
+    }
 
     playerIndex = changePlayerIndex();
 
@@ -413,7 +435,7 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
                 dragonRoarSound();
                 newDragonIndex = lostLife2();
                 dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
-                
+
 
             } else if (life == 0) {
                 gameOver();
@@ -433,6 +455,25 @@ document.querySelector('.gamepad').addEventListener('click', (e) => {
         dragon.isActive = true;
         dragon.index = insertDragon(dragon.index, dragon.className);
         // insertDragon(Math.random.dragons.index, Math.random.dragons.className);
+
+        if (countTreasure == 3 || countTreasure == 6 || countTreasure == 9 || countTreasure == 11 || countTreasure == 13) {
+            while (existingIndex.includes(heartIndex)) { heartIndex = getRandomIndex(); }
+            cellArray[heartIndex].classList.add('heart');
+            console.log(`Coeur ajouté en ${heartIndex}`);
+            return heartIndex;
+        }
+    }
+
+    if (playerIndex == heartIndex) {
+        if (life == maxLife) {
+            return;
+        } else {
+            life++;
+            healingSound();
+            heartArray[life - 1].classList.remove('lost');
+            heartArray[life - 1].classList.add('getLife');
+            cellArray[heartIndex].classList.remove('heart');
+        }
     }
 });
 // });

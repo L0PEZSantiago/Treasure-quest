@@ -1,0 +1,6 @@
+{
+    "gitlens.codeLens.enabled": true,
+    "codeium.disableSupercomplete": false,
+    "codeium.enableSearch": "default",
+    "codeium.enableCodeLens": true
+}
