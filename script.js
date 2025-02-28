@@ -5,15 +5,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const myAudio = document.querySelector('audio');
 
-(async function () {
-    myAudio.src = 'musics/Zelda Main Theme Song.mp3';
-    myAudio.volume = 0.05;
-    await myAudio.play();
-    myAudio.loop = true;
-    myAudio.autoplay = true;
-    myAudio.controls = true;
-    myAudio.preload = 'auto';
-})();
+// (async function () {
+//     myAudio.src = 'musics/Zelda Main Theme Song.mp3';
+//     myAudio.volume = 0.05;
+//     await myAudio.play();
+//     myAudio.loop = true;
+//     myAudio.autoplay = true;
+//     myAudio.controls = true;
+//     myAudio.preload = 'auto';
+// })();
 
 /* ----------------- VARIABLES DOM ----------------- */
 const checksboxs = document.querySelectorAll('input[type="checkbox"]');
@@ -329,6 +329,11 @@ playerIndex = cellArray.indexOf(player);
 
 // ----------------------------------- FONCTIONS ------------------------------------ //
 
+function teleportSound() {
+    const teleportSound = new Audio('sounds/teleport.mp3');
+    teleportSound.volume = 0.6;
+    teleportSound.play();
+}
 function healingSound() {
     const healingSound = new Audio('sounds/magic_spell_10-39689.mp3');
     healingSound.volume = 0.7;
@@ -557,6 +562,7 @@ document.addEventListener('keydown', (event) => {
     let recentlyTeleported = false;
     function teleportation(portal, portal2) {
         if (playerIndex === portal.index && !recentlyTeleported) {
+            teleportSound();
             recentlyTeleported = true;
             newPlayerIndex = portal2.index;
             cellArray[playerIndex].classList.remove('player');
@@ -675,6 +681,7 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
     let recentlyTeleported = false;
     function teleportation(portal, portal2) {
         if (playerIndex === portal.index && !recentlyTeleported) {
+            teleportSound();
             recentlyTeleported = true;
             newPlayerIndex = portal2.index;
             cellArray[playerIndex].classList.remove('player');
