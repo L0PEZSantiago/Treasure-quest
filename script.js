@@ -335,9 +335,15 @@ function teleportSound() {
     teleportSound.play();
 }
 function healingSound() {
-    const healingSound = new Audio('sounds/magic_spell_10-39689.mp3');
+    const healingSound = new Audio('sounds/healing.mp3');
     healingSound.volume = 0.7;
     healingSound.play();
+}
+
+function healPopSound() {
+    const popSound = new Audio('sounds/healpop.mp3');
+    popSound.volume = 0.8;
+    popSound.play();
 }
 
 function treasureFounded() {
@@ -616,6 +622,7 @@ document.addEventListener('keydown', (event) => {
         if (countTreasure == 3 || countTreasure == 6 || countTreasure == 9 || countTreasure == 11 || countTreasure == 13) {
             while (existingIndex.includes(heartIndex)) { heartIndex = getRandomIndex(); }
             cellArray[heartIndex].classList.add('heart');
+            healPopSound();
             console.log(`Coeur ajouté en ${heartIndex}`);
             return heartIndex;
         }
@@ -732,6 +739,7 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
         if (countTreasure == 3 || countTreasure == 6 || countTreasure == 9 || countTreasure == 11 || countTreasure == 13 || countTreasure == 15 || countTreasure == 17 || countTreasure == 19) {
             while (existingIndex.includes(heartIndex)) { heartIndex = getRandomIndex(); }
             cellArray[heartIndex].classList.add('heart');
+            healPopSound();
             console.log(`Coeur ajouté en ${heartIndex}`);
             return heartIndex;
         }
