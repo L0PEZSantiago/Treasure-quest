@@ -194,9 +194,6 @@ let purplePortal2 = new Portal(getRandomIndex(), "purple", "short-portal-purple"
 let bluePortal = new Portal(getRandomIndex(), "blue", "short-portal-blue");
 let bluePortal2 = new Portal(getRandomIndex(), "blue", "short-portal-blue");
 
-if (isMobile == 'true') {
-    nbrColumns = 20; // A changer tout en haut
-};
 
 let lowerValue = Math.floor(nbrRows * 0.2);   // Ici j'obiens 30 % des lignes donc partie haut, donc ça renvoit 6 car 20*0.3.
 let higherValue = Math.floor(nbrRows * 0.6);  // Ici j'obiens 60 % des lignes donc partie bas, donc cela renvoit 13 car 20*0.6.
@@ -426,6 +423,26 @@ function dragonMoves2(dragonIndex) {
     return potentialMoves[Math.floor(Math.random() * potentialMoves.length)];
 }
 
+function calcRowDiffMobile(dragonIndex) {
+    return Math.floor((playerIndex - dragonIndex) / 10);
+}
+
+function calcColDiffMobile(dragonIndex) {
+    return (playerIndex % 10) - (dragonIndex % 10);
+}
+
+function dragonMovesMobile(dragonIndex) {
+    const rowDiff = calcRowDiffMobile(dragonIndex);
+    const colDiff = calcColDiffMobile(dragonIndex);
+    if (rowDiff === 0 && colDiff === 0) return dragonIndex;
+
+    const potentialMoves = [];
+    if (rowDiff !== 0) potentialMoves.push(dragonIndex + (rowDiff > 0 ? 10 : -10));
+    if (colDiff !== 0) potentialMoves.push(dragonIndex + (colDiff > 0 ? 1 : -1));
+
+    return potentialMoves[Math.floor(Math.random() * potentialMoves.length)];
+}
+
 // Changer l'index du dragon
 function changeDragonIndex(dragonIndex, newDragonIndex, className) {
     // Si sur le prochain index du dragon se trouve  un autre dragon, alors rien ne se passe, on utilise .some avec le endsWith
@@ -628,12 +645,12 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
             newPlayerIndex = playerIndex + 10;
             break;
         case 'btnLeft':
-            if (playerIndex % 20 != 0) {
+            if (playerIndex % 10 != 0) {
                 newPlayerIndex = playerIndex - 1;
             }
             break;
         case 'btnRight':
-            if (playerIndex % 20 != 19) {
+            if (playerIndex % 10 != 9) {
                 newPlayerIndex = playerIndex + 1;
             }
             break;
@@ -676,7 +693,7 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
 
     dragons.forEach(dragon => {
         if (dragon.isActive) {
-            let newDragonIndex = dragonMoves2(dragon.index);
+            let newDragonIndex = dragonMovesMobile(dragon.index);
             dragon.index = changeDragonIndex(dragon.index, newDragonIndex, dragon.className);
 
             if (playerIndex == dragon.index) {
@@ -715,16 +732,20 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
 
     if (playerIndex == heartIndex) {
         if (life == maxLife) {
-            return;
+            return
         } else {
             life++;
             healingSound();
             heartArray[0].classList.contains('last') ? heartArray[0].classList.remove('last') : false;
+            !heartArray[0].classList.contains('last') ? myAudio.playbackRate = 1 : false;
             heartArray[life - 1].classList.remove('lost');
             heartArray[life - 1].classList.add('getLife');
             cellArray[heartIndex].classList.remove('heart');
+            heartIndex = getRandomIndex();
         }
+        console.log(heartArray);
     }
+    
 });
 // });
 
