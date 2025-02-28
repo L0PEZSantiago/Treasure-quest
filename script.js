@@ -621,11 +621,11 @@ document.querySelector('.gamepad').addEventListener('touchstart', (e) => {
     let newPlayerIndex;
     switch (e.target.className) {
         case 'btnUp':
-            newPlayerIndex = playerIndex - 20;
+            newPlayerIndex = playerIndex - 10;
             break;
 
         case 'btnDown':
-            newPlayerIndex = playerIndex + 20;
+            newPlayerIndex = playerIndex + 10;
             break;
         case 'btnLeft':
             if (playerIndex % 20 != 0) {
