@@ -26,8 +26,6 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 30vw; 
-    height: 40vh;
     background-color: yellow;
     border-radius: 50px;
     gap: 40px;
@@ -36,6 +34,15 @@ body {
     color: green;
     z-index: 9999;
     text-align: center;
+    padding: 2.1rem;
+}
+
+.choose-difficulty {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+    gap: 1.5rem;
 }
 
 .difficulty input {
@@ -64,7 +71,7 @@ body {
     color: green;
     text-align: center;
     cursor: pointer;
-    border: green solid 3px;
+    border: green solid 3px;;
 }
 
 .difficulty button:hover {
@@ -76,10 +83,27 @@ body {
     display: none;
 }
 
-audio {
-    position: absolute;
-    bottom: 0.3rem;
-    display: none;
+.desktopOrMobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    gap: 15px;
+}
+
+.desktopOrMobile-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-decoration: underline;
+}
+
+.desktopOrMobile-choices {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .treasuresAndLifes {
@@ -103,7 +127,7 @@ audio {
 }
 
 .lifes i {
-    color: rgba(255, 0, 0, 0.795);
+    color: rgb(255, 0, 0);
     font-size: 42px;
     transition: all 0.7s ease-in-out;
 }
@@ -150,6 +174,15 @@ audio {
     grid-column: 1 span;
     grid-row: 1 span;
 }
+
+.desktopOrMobile {
+    display: flex;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
 
 .cell.short-portal-blue {
     background-image: url(assets/short-portal-blue.png);
@@ -346,6 +379,8 @@ audio {
     .grid {
         height: 40vh;
         width: 100vw;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
     }
 
     /* .cell {
@@ -354,7 +389,7 @@ audio {
     } */
 
     .cell {
-        width: calc(100vw/20);
+        width: calc(100vw/10);
         height: calc(40vh/20);
     }
 
@@ -396,7 +431,7 @@ audio {
 
     .treasures {
         display: flex;
-        gap: 10px;
+        gap: 2px;
         width: 100vw;
         flex-wrap: wrap;
     }
@@ -415,9 +450,14 @@ audio {
         display: none;
     }
 
+    .desktopOrMobile-choices {
+        width: 75%;
+        font-size: 1.1rem;
+    }
+
     .gamepad {
         display: flex;
-        gap: 10px;
+        gap: 15px;
         position: static;
         flex-direction: column;
         align-items: center;
@@ -427,7 +467,7 @@ audio {
 
     .leftAndRight {
         display: flex;
-        gap: 20px;
+        gap: 40px;
     }
     
     .gamepad button {
