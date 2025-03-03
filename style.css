@@ -121,6 +121,19 @@ body {
     justify-content: center;
 }
 
+.restart {
+    background-color: transparent;
+    padding: 2rem;
+    border: none;
+    cursor: pointer;
+    background-image: url(assets/btnRestart.png);
+    transition: all 0.1s ease-in-out;
+}
+
+.restart:hover {
+    transform: scale(1.2);
+}
+
 .lifes {
     display: flex;
     gap: 10px;
@@ -314,6 +327,12 @@ body {
     opacity: 0.6;
     background-color: rgb(159, 192, 159);
     border: solid 1px rgb(0, 0, 255);
+}
+
+.cell.epee {
+    background-image: url(assets/epee.png);
+    animation: scaleInOut 2s ease-in-out infinite;
+    border: none;
 }
 
 .success {

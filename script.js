@@ -23,6 +23,7 @@ const btnLeft = document.querySelector('.btnLeft');
 const btnRight = document.querySelector('.btnRight');
 const grid = document.querySelector('.grid');
 let btnStart = document.querySelector('.btn-set-difficulty');
+let btnRestart = document.querySelector('.restart');
 
 /* ----------------- VARIABLES GLOBALES ----------------- */
 let difficultyMax = 14;
@@ -95,6 +96,10 @@ btnStart.addEventListener('click', () => {
     }
 })
 
+btnRestart.addEventListener('click', () => {
+    location.reload();
+})
+
 
 /* ----------------- INITIALISATION ----------------- */
 
@@ -152,10 +157,26 @@ class Portal {
         // console.log("Class:", this.className, "Row:", this.row, "Col:", this.col);
 
         // Je dois calculer la col et la row de chaque portal
-        calculateCol(index, nbrColumns);
-        calculateRow(index, nbrRows);
+        // calculateCol(index, nbrColumns);
+        // calculateRow(index, nbrRows);
     }
 }
+
+// class Objet {
+//     constructor(index, className) {
+//         this.index = index;
+//         this.className = className;
+//     }
+// }
+// Je vais créer une classe qui hérite de Objet
+// class Treasure extends Objet {
+//     constructor(index, className, ) {
+//         super(index, className);
+
+//     }
+
+
+// }
 
 /* ----------------- CREATION GRID ----------------- */
 
